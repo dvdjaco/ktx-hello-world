@@ -1,11 +1,13 @@
 # hello_world
 from flask import Flask
+import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    hello_world = "Kubeops :: Hello, world!!!"
+    image_tag = os.environ.get('IMAGE_TAG', 'No tag availabe')
+    hello_world = "Kubeops :: Hello, world! :: " + image_tag
     return hello_world
 
 @app.route('/health')
