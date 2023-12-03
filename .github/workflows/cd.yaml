@@ -9,7 +9,6 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKERHUB_KEY: ${{ secrets.DOCKER_KEY }}
   IMAGE_NAME: hello_world
-  VERSION: $(cat version)
 
 jobs:
   build-and-deploy:
@@ -29,15 +28,20 @@ jobs:
         run: VERSION=$(cat version)
 
       - name: Build Docker image
-        run: docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} .
+        run: |
+          VERSION=$(cat version)
+          docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:$VERSION .
 
       - name: Push Docker image
-        run: docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+        run: |
+          VERSION=$(cat version)
+          docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:$VERSION
 
       - name: Update values.yaml
         run: |
+          VERSION=$(cat version)
           cd helm
-          sed -i 's|APP_VERSION:.*|APP_VERSION: '${{ env.VERSION }}'|' values.yaml 
+          sed -i 's|APP_VERSION:.*|APP_VERSION: '$VERSION'|' values.yaml 
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
           git add values.yaml
