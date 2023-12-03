@@ -1,4 +1,4 @@
 env:
-  APP_VERSION: d63c5bb1a99c6929d85206b18e047ea8424a108f
+  APP_VERSION: 
 service:
   type: app
