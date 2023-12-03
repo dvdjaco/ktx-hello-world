@@ -1,4 +1,4 @@
 env:
-  APP_VERSION: 
+  APP_VERSION: 0.1.7
 service:
   type: app
